@@ -1,5 +1,20 @@
-#### Pending Release
+#### v1.1.5
+##### 2019-12-22
 
+* Fix startup issues when connecting to a node that's not ready to serve data (e.g. verifying blocks)
+* Homepage header: show exchange rate in selected currency (rather than hardcoded USD)
+* Homepage header: show sat/USD or sat/EUR
+
+#### v1.1.4
+###### 2019-12-04
+
+* First-class support for testnet/regtest
+
+#### v1.1.3
+###### 2019-12-02
+
+* Fixes related to running bitcoind 0.19.0.1
+* Updated dependencies
 * Version number in footer
 * `/changelog` linked in footer
 
