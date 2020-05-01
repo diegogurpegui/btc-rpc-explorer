@@ -300,6 +300,10 @@
             "name": "HotPool",
             "link": "https://hotpool.co/"
         },
+        "/www.okex.com/" : {
+            "name": "OKExPool",
+            "link": "https://www.okex.com/"
+        },
         "/BCMonster/" : {
             "name": "BCMonster",
             "link": "http://www.bcmonster.com/"
@@ -450,11 +454,19 @@
         },
         "/bytepool.com/": {
             "name" : "BytePool",
-            "link" : "https://bytepool.com/"
+            "link" : "https://www.bytepool.com/"
         },
-        "/SpiderPool.com/": {
+        "/SpiderPool/": {
             "name" : "SpiderPool",
             "link" : "https://www.spiderpool.com/"
+        },
+        "/NovaBlock/": {
+            "name" : "NovaBlock",
+            "link" : "https://novablock.com"
+        },
+        "MiningCity":{
+            "name" : "MiningCity",
+            "link" : "https://www.miningcity.com/"
         }
     },
     "payout_addresses" : {
@@ -852,7 +864,7 @@
         },
         "39m5Wvn9ZqyhYmCYpsyHuGMt5YYw4Vmh1Z" : {
             "name": "BytePool",
-            "link": "https://bytepool.com/"
+            "link": "https://www.bytepool.com/"
         },
         "38u1srayb1oybVB43UWKBJsrwJbdHGtPx2": {
             "name" : "SpiderPool",
@@ -1009,6 +1021,10 @@
         "125K2xfiBdae42gSKiCGwi85Frpy1vHmGj": {
             "name": "UKRPool",
             "link": "https://www.ukrpool.com"
+        },
+        "11wC5KcbgrWRBb43cwADdVrxgyF8mndVC": {
+            "name": "MiningCity",
+            "link": "https://www.miningcity.com/"
         }
     }
 }

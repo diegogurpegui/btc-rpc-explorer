@@ -52,18 +52,34 @@ var currencyUnits = [
 module.exports = {
 	name:"Bitcoin",
 	ticker:"BTC",
-	logoUrl:"/img/logo/btc.svg",
-	siteTitle:"Bitcoin Explorer",
+	logoUrlsByNetwork:{
+		"main":"/img/logo/btc.svg",
+		"test":"/img/logo/tbtc.svg",
+		"regtest":"/img/logo/tbtc.svg"
+	},
+	siteTitlesByNetwork: {
+		"main":"Bitcoin Explorer",
+		"test":"Testnet Explorer",
+		"regtest":"Regtest Explorer"
+	},
 	siteDescriptionHtml:"<b>BTC Explorer</b> is <a href='https://github.com/janoside/btc-rpc-explorer). If you run your own [Bitcoin Full Node](https://bitcoin.org/en/full-node), **BTC Explorer** can easily run alongside it, communicating via RPC calls. See the project [ReadMe](https://github.com/janoside/btc-rpc-explorer) for a list of features and instructions for running.",
 	nodeTitle:"Bitcoin Full Node",
 	nodeUrl:"https://bitcoin.org/en/full-node",
-	demoSiteUrl: "https://btc.chaintools.io",
+	demoSiteUrl: "https://explorer.btc21.org",
 	miningPoolsConfigUrls:[
 		"https://raw.githubusercontent.com/btccom/Blockchain-Known-Pools/master/pools.json",
 		"https://raw.githubusercontent.com/blockchain/Blockchain-Known-Pools/master/pools.json"
 	],
 	maxBlockWeight: 4000000,
+	maxBlockSize: 1000000,
+	difficultyAdjustmentBlockCount: 2016,
+	maxSupplyByNetwork: {
+		"main": new Decimal(20999817.31308491), // ref: https://bitcoin.stackexchange.com/a/38998
+		"test": new Decimal(21000000),
+		"regtest": new Decimal(21000000)
+	},
 	targetBlockTimeSeconds: 600,
+	targetBlockTimeMinutes: 10,
 	currencyUnits:currencyUnits,
 	currencyUnitsByName:{"BTC":currencyUnits[0], "mBTC":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
 	baseCurrencyUnit:currencyUnits[3],
@@ -178,6 +194,82 @@ module.exports = {
 			"blocktime": 1296688602
 		}
 	},
+	genesisBlockStatsByNetwork:{
+		"main": {
+			"avgfee": 0,
+			"avgfeerate": 0,
+			"avgtxsize": 0,
+			"blockhash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+			"feerate_percentiles": [
+				0,
+				0,
+				0,
+				0,
+				0
+			],
+			"height": 0,
+			"ins": 0,
+			"maxfee": 0,
+			"maxfeerate": 0,
+			"maxtxsize": 0,
+			"medianfee": 0,
+			"mediantime": 1231006505,
+			"mediantxsize": 0,
+			"minfee": 0,
+			"minfeerate": 0,
+			"mintxsize": 0,
+			"outs": 1,
+			"subsidy": 5000000000,
+			"swtotal_size": 0,
+			"swtotal_weight": 0,
+			"swtxs": 0,
+			"time": 1231006505,
+			"total_out": 0,
+			"total_size": 0,
+			"total_weight": 0,
+			"totalfee": 0,
+			"txs": 1,
+			"utxo_increase": 1,
+			"utxo_size_inc": 117
+		},
+		"test": {
+			"avgfee": 0,
+			"avgfeerate": 0,
+			"avgtxsize": 0,
+			"blockhash": "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
+			"feerate_percentiles": [
+				0,
+				0,
+				0,
+				0,
+				0
+			],
+			"height": 0,
+			"ins": 0,
+			"maxfee": 0,
+			"maxfeerate": 0,
+			"maxtxsize": 0,
+			"medianfee": 0,
+			"mediantime": 1296688602,
+			"mediantxsize": 0,
+			"minfee": 0,
+			"minfeerate": 0,
+			"mintxsize": 0,
+			"outs": 1,
+			"subsidy": 5000000000,
+			"swtotal_size": 0,
+			"swtotal_weight": 0,
+			"swtxs": 0,
+			"time": 1296688602,
+			"total_out": 0,
+			"total_size": 0,
+			"total_weight": 0,
+			"totalfee": 0,
+			"txs": 1,
+			"utxo_increase": 1,
+			"utxo_size_inc": 117
+		}
+	},
 	genesisCoinbaseOutputAddressScripthash:"8b01df4e368ea28f8dc0423bcf7a4923e3a12d307c875e47a0cfbf90b5c39161",
 	historicalData: [
 		{
@@ -258,8 +350,16 @@ module.exports = {
 			blockHeight: 170,
 			blockHash: "00000000d1145790a8694403d4063f323d499e655c83426834d4ce2f8dd4a2ee",
 			summary: "First block containing a (non-coinbase) transaction.",
-			alertBodyHtml: "This block comes 9 days after the genesis block and is the first to contain a transfer of bitcoin. Before this block all blocks contained only coinbase transactions which mint new bitcoin.",
+			alertBodyHtml: "This block comes 9 days after the genesis block and is the first to contain a transfer of bitcoin. Before this block all blocks contained only coinbase transactions, which mint new bitcoin.<br/>See transaction #1 (f4184fc…) below for more info.",
 			referenceUrl: "https://bitcointalk.org/index.php?topic=91806.msg1012234#msg1012234"
+		},
+		{
+			type: "tx",
+			date: "2009-01-12",
+			chain: "main",
+			txid: "f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16",
+			summary: "The first transfer of bitcoin.",
+			alertBodyHtml: "This transaction represents the first ever transfer of bitcoin from one person to another. It also has the added distinction of being (one of?) the only known transfers of bitcoin from Satoshi Nakamoto, in this case sending bitcoin to Hal Finney as a test."
 		},
 		{
 			type: "blockheight",
@@ -314,6 +414,13 @@ module.exports = {
 			summary: "Duplicated coinbase transaction #2",
 			referenceUrl: "https://bitcoin.stackexchange.com/questions/38994/will-there-be-21-million-bitcoins-eventually/38998#38998",
 			alertBodyHtml: "This is one of 2 'duplicate coinbase' transactions. An early bitcoin bug (fixed by <a href='https://github.com/bitcoin/bips/blob/master/bip-0030.mediawiki'>BIP30</a>) allowed identical coinbase transactions - a newer duplicate would overwrite older copies. This transaction was the coinbase transaction for <a href='/block-height/91812'>Block #91,812</a> and, ~3 hours later, <a href='/block-height/91842'>Block #91,842</a>. The 50 BTC claimed as the coinbase for block 91,812 were also overwritten and lost."
+		},
+		{
+			type: "tx",
+			date: "2020-03-11",
+			chain: "main",
+			txid: "eeea72f5c9fe07178013eac84c3705443321d5453befd7591f52d22ac39b3963",
+			summary: "500+ million USD transferred for < 1 USD fee (2020 prices)."
 		},
 
 
