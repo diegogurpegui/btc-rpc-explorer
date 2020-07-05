@@ -922,20 +922,32 @@ router.get("/address/:address", function(req, res, next) {
 	
 	res.locals.result = {};
 
+	var parseAddressErrors = [];
+
 	try {
 		res.locals.addressObj = bitcoinjs.address.fromBase58Check(address);
 
 	} catch (err) {
 		if (!err.toString().startsWith("Error: Non-base58 character")) {
-			res.locals.pageErrors.push(utils.logError("u3gr02gwef", err));
+			parseAddressErrors.push(utils.logError("u3gr02gwef", err));
+		}
+	}
+
+	try {
+		res.locals.addressObj = bitcoinjs.address.fromBech32(address);
+
+	} catch (err2) {
+		if (!err2.toString().startsWith("Error: Mixed-case string " + address)) {
+			parseAddressErrors.push(utils.logError("u02qg02yqge", err2));
 		}
 
-		try {
-			res.locals.addressObj = bitcoinjs.address.fromBech32(address);
+		
+	}
 
-		} catch (err2) {
-			res.locals.pageErrors.push(utils.logError("u02qg02yqge", err));
-		}
+	if (res.locals.addressObj == null) {
+		parseAddressErrors.forEach(function(x) {
+			res.locals.pageErrors.push(x);
+		});
 	}
 
 	if (global.miningPoolsConfigs) {
@@ -1176,7 +1188,7 @@ router.get("/rpc-terminal", function(req, res, next) {
 		return;
 	}
 
-	res.render("terminal");
+	res.render("rpc-terminal");
 
 	next();
 });
@@ -1290,7 +1302,7 @@ router.get("/rpc-browser", function(req, res, next) {
 
 								} else if (argProperties[j] === "string" || argProperties[j] === "numeric or string" || argProperties[j] === "string or numeric") {
 									if (req.query.args[i]) {
-										argValues.push(req.query.args[i]);
+										argValues.push(req.query.args[i].replace(/[\r]/g, ''));
 									}
 
 									break;
@@ -1314,7 +1326,7 @@ router.get("/rpc-browser", function(req, res, next) {
 					if (config.rpcBlacklist.includes(req.query.method.toLowerCase())) {
 						res.locals.methodResult = "Sorry, that RPC command is blacklisted. If this is your server, you may allow this command by removing it from the 'rpcBlacklist' setting in config.js.";
 
-						res.render("browser");
+						res.render("rpc-browser");
 
 						next();
 
@@ -1326,10 +1338,10 @@ router.get("/rpc-browser", function(req, res, next) {
 							return next(err);
 						}
 
-						debugLog("Executing RPC '" + req.query.method + "' with params: [" + argValues + "]");
+						debugLog("Executing RPC '" + req.query.method + "' with params: " + JSON.stringify(argValues));
 
 						global.rpcClientNoTimeout.command([{method:req.query.method, parameters:argValues}], function(err3, result3, resHeaders3) {
-							debugLog("RPC Response: err=" + err3 + ", result=" + result3 + ", headers=" + resHeaders3);
+							debugLog("RPC Response: err=" + err3 + ", headers=" + resHeaders3 + ", result=" + JSON.stringify(result3));
 
 							if (err3) {
 								res.locals.pageErrors.push(utils.logError("23roewuhfdghe", err3, {method:req.query.method, params:argValues, result:result3, headers:resHeaders3}));
@@ -1347,26 +1359,26 @@ router.get("/rpc-browser", function(req, res, next) {
 								res.locals.methodResult = {"Error":"No response from node."};
 							}
 
-							res.render("browser");
+							res.render("rpc-browser");
 
 							next();
 						});
 					});
 				} else {
-					res.render("browser");
+					res.render("rpc-browser");
 
 					next();
 				}
 			}).catch(function(err) {
 				res.locals.userMessage = "Error loading help content for method " + req.query.method + ": " + err;
 
-				res.render("browser");
+				res.render("rpc-browser");
 
 				next();
 			});
 
 		} else {
-			res.render("browser");
+			res.render("rpc-browser");
 
 			next();
 		}
@@ -1374,10 +1386,44 @@ router.get("/rpc-browser", function(req, res, next) {
 	}).catch(function(err) {
 		res.locals.userMessage = "Error loading help content: " + err;
 
-		res.render("browser");
+		res.render("rpc-browser");
 
 		next();
 	});
+});
+
+router.get("/terminal", function(req, res, next) {
+	res.render("terminal");
+
+	next();
+});
+
+router.post("/terminal", function(req, res, next) {
+	console.log("here");
+
+	var params = req.body.cmd.trim().split(/\s+/);
+	var cmd = params.shift();
+	var paramsStr = req.body.cmd.trim().substring(cmd.length).trim();
+
+	console.log("abc: " + params + ", " + cmd + ", " + paramsStr);
+
+	if (cmd == "parsescript") {
+		const nbs = require('node-bitcoin-script');
+		var parsedScript = nbs.parseRawScript(paramsStr, "hex");
+
+		res.write(JSON.stringify({"parsed":parsedScript}, null, 4), function() {
+			res.end();
+		});
+
+		next();
+
+	} else {
+		res.write(JSON.stringify({"Error":"Unknown command"}, null, 4), function() {
+			res.end();
+		});
+
+		next();
+	}
 });
 
 router.get("/unconfirmed-tx", function(req, res, next) {
@@ -1486,6 +1532,7 @@ router.get("/admin", function(req, res, next) {
 	res.locals.appStartTime = global.appStartTime;
 	res.locals.memstats = v8.getHeapStatistics();
 	res.locals.rpcStats = global.rpcStats;
+	res.locals.electrumStats = global.electrumStats;
 	res.locals.cacheStats = global.cacheStats;
 	res.locals.errorStats = global.errorStats;
 
@@ -1512,7 +1559,18 @@ router.get("/fun", function(req, res, next) {
 			return -1;
 
 		} else {
-			return a.type.localeCompare(b.type);
+			var x = a.type.localeCompare(b.type);
+
+			if (x == 0) {
+				if (a.type == "blockheight") {
+					return a.blockHeight - b.blockHeight;
+
+				} else {
+					return x;
+				}
+			}
+
+			return x;
 		}
 	});
 

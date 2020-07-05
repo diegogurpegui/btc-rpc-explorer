@@ -310,6 +310,42 @@ module.exports = {
 			referenceUrl: "https://twitter.com/conio/status/900722226911219712"
 		},
 		{
+			type: "blockheight",
+			date: "2012-11-28",
+			chain: "main",
+			blockHeight: 210000,
+			blockHash: "000000000000048b95347e83192f69cf0366076336c639f9b7228e9ba171342e",
+			summary: "First block of subsidy era #2 (25 BTC).",
+			referenceUrl: "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp#L1240"
+		},
+		{
+			type: "blockheight",
+			date: "2016-07-09",
+			chain: "main",
+			blockHeight: 420000,
+			blockHash: "000000000000000002cce816c0ab2c5c269cb081896b7dcb34b8422d6b74ffa1",
+			summary: "First block of subsidy era #3 (12.5 BTC).",
+			referenceUrl: "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp#L1240"
+		},
+		{
+			type: "blockheight",
+			date: "2020-05-11",
+			chain: "main",
+			blockHeight: 630000,
+			blockHash: "000000000000000000024bead8df69990852c202db0e0097c1a12ea637d7e96d",
+			summary: "First block of subsidy era #4 (6.25 BTC).",
+			referenceUrl: "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp#L1240"
+		},
+		{
+			type: "blockheight",
+			date: "2020-05-11",
+			chain: "main",
+			blockHeight: 629999,
+			blockHash: "0000000000000000000d656be18bb095db1b23bd797266b0ac3ba720b1962b1e",
+			summary: "'Times 09/Apr/2020 With $2.3T Injection, Fed's Plan Far Exceeds 2008 Rescue'",
+			alertBodyHtml: "With the coinbase message 'Times 09/Apr/2020 With $2.3T Injection, Fed's Plan Far Exceeds 2008 Rescue', this final block of subsidy era #3 (12.5 BTC) echoes the spiritual call-to-action of <a href='/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f'>Satoshi's genesis block</a>.",
+		},
+		{
 			type: "tx",
 			date: "2017-08-24",
 			chain: "main",
@@ -331,7 +367,7 @@ module.exports = {
 			chain: "main",
 			txid: "a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d",
 			summary: "The 'Bitcoin Pizza' transaction.",
-			alertBodyHtml: "This is the famous 'Bitcoin Pizza' transaction.",
+			alertBodyHtml: "This is the famous 'Bitcoin Pizza' transaction, one of the earliest 'real-world' transactions, in which 10,000 BTC was paid for 2 large pizzas worth ~41 USD (at an effective exchange rate of ~$0.04/BTC).",
 			referenceUrl: "https://bitcointalk.org/index.php?topic=137.0"
 		},
 		{
@@ -422,6 +458,16 @@ module.exports = {
 			txid: "eeea72f5c9fe07178013eac84c3705443321d5453befd7591f52d22ac39b3963",
 			summary: "500+ million USD transferred for < 1 USD fee (2020 prices)."
 		},
+		{
+			type: "tx",
+			date: "2020-05-20",
+			chain: "main",
+			txid: "cb1440c787d8a46977886405a34da89939e1b04907f567bf182ef27ce53a8d71",
+			summary: "Very old coins (mined ~1 month after genesis) move unexpectedly, causing uproar",
+			alertBodyHtml: "On May 5, 2020, 50 BTC mined on Feb 9, 2009 (~1 month after Satoshi mined the Genesis block), moved unexpectedly after being dormant for 11+ years. Some observers wondered if they were coins from Satoshi's stash (they likely <a href='https://twitter.com/zackvoell/status/1263120133054255104'>were not</a>) and got excited.",
+			referenceUrl: "https://twitter.com/WhalePanda/status/1263120678380867586"
+		},
+
 
 
 		// testnet
