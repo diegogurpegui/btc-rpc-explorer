@@ -10,11 +10,11 @@ block content
 	if (getblockchaininfo)
 		if (false)
 			p Data from RPC commands 
-				a(href="/rpc-browser?method=getblockchaininfo") getblockchaininfo
+				a(href="./rpc-browser?method=getblockchaininfo") getblockchaininfo
 				span , 
-				a(href="/rpc-browser?method=getnetworkinfo") getnetworkinfo
+				a(href="./rpc-browser?method=getnetworkinfo") getnetworkinfo
 				span , and 
-				a(href="/rpc-browser?method=getnettotals") getnettotals
+				a(href="./rpc-browser?method=getnettotals") getnettotals
 
 		if (false)
 			pre
@@ -123,7 +123,12 @@ block content
 						div.clearfix
 							div.row
 								div.summary-table-label Peers
-								div.summary-table-content.text-monospace #{getnetworkinfo.connections.toLocaleString()}
+								div.summary-table-content.text-monospace
+									span #{getnetworkinfo.connections.toLocaleString()}
+
+									if (getnetworkinfo.connections_in)
+										br
+										span.text-muted (#{getnetworkinfo.connections_in.toLocaleString()} in; #{getnetworkinfo.connections_out.toLocaleString()} out)
 
 							div.row
 								div.summary-table-label Network Traffic
